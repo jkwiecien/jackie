@@ -24,7 +24,7 @@ android {
     buildToolsVersion build_tools_version
 
     defaultConfig {
-        applicationId "com.qriosity.attendee"
+        applicationId "net.techbrewery.jackie.robot"
         minSdkVersion min_sdk_version
         targetSdkVersion target_sdk_version
         versionCode gitCount().toInteger()
