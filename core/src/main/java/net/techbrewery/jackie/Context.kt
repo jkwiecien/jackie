@@ -1,35 +1,34 @@
 package net.techbrewery.jackie
 
+import android.content.Context
+import android.content.Context.WIFI_SERVICE
+import android.net.wifi.WifiManager
+import timber.log.Timber
+import java.math.BigInteger
+import java.net.InetAddress
+import java.net.UnknownHostException
+import java.nio.ByteOrder
+
+
 /**
  * Created by Jacek Kwiecień on 30.10.2017.
  */
 
-//val Context.ipAddress: String
-//    get() {
-//        var ip = ""
-//        try {
-//            val enumNetworkInterfaces: Enumeration<NetworkInterface> = NetworkInterface.getNetworkInterfaces()
-//            while (enumNetworkInterfaces.hasMoreElements()) {
-//                val networkInterface = enumNetworkInterfaces.nextElement()
-//                Enumeration<InetAddress> enumInetAddress = networkInterface . getInetAddresses ();
-//                while (enumInetAddress.hasMoreElements()) {
-//                    InetAddress inetAddress = enumInetAddress . nextElement ();
-//
-//                    if (inetAddress.isSiteLocalAddress()) {
-//                        ip += "SiteLocalAddress: "
-//                        +inetAddress.getHostAddress() + "\n";
-//                    }
-//
-//                }
-//
-//            }
-//
-//        } catch (error: SocketException) {
-//            // TODO Auto-generated catch block
-//            error.printStackTrace();
-//            ip += "Something Wrong! " + e.toString() + "\n";
-//        }
-//
-//        return ip;
-//    }
-//}
+val Context.ipAddress: String?
+    get() {
+        val wifiManager = this.getSystemService(WIFI_SERVICE) as WifiManager
+        var ipAddress = wifiManager.connectionInfo.ipAddress
+
+        if (ByteOrder.nativeOrder() == ByteOrder.LITTLE_ENDIAN) {
+            ipAddress = Integer.reverseBytes(ipAddress)
+        }
+
+        val ipByteArray = BigInteger.valueOf(ipAddress.toLong()).toByteArray()
+
+        return try {
+            InetAddress.getByAddress(ipByteArray).hostAddress
+        } catch (ex: UnknownHostException) {
+            Timber.e("Unable to get host address.")
+            null
+        }
+    }

@@ -4,10 +4,9 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import com.google.android.things.pio.Gpio
 import com.google.android.things.pio.PeripheralManagerService
-import net.techbrewery.jackie.p2p.DiscoveryActivity
+import net.techbrewery.jackie.socket.SocketServerActivity
 
 /**
  * Created by Jacek Kwiecień on 26.10.2017.
@@ -27,7 +26,7 @@ class EngineActivity : Activity() {
 
         handler.post(blinkRunnable())
 
-        startActivity(Intent(this, DiscoveryActivity::class.java))
+        startActivity(Intent(this, SocketServerActivity::class.java))
     }
 
     override fun onDestroy() {
@@ -37,7 +36,6 @@ class EngineActivity : Activity() {
     }
 
     private fun blinkRunnable(): Runnable = Runnable {
-        Log.i("jacek", "STARTUJEMY")
         val safeGpio = this@EngineActivity.gpio
         safeGpio?.let {
             safeGpio.value = !safeGpio.value
