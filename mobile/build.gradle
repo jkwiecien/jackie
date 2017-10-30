@@ -1,20 +1,38 @@
+static def gitSha() {
+    return "git rev-parse --short HEAD".execute().text.trim()
+}
+
+static def gitCount() {
+    return "git rev-list HEAD --first-parent --count".execute().text.trim()
+}
+
+static def gitTag() {
+    return "git describe --tags --abbrev=0".execute().text.trim()
+}
+
+def getAutoVersionName() {
+    def publish = hasProperty("publish") ? getProperty("publish") : false
+    return publish ? "${gitTag()}" : "${gitCount()} {${gitSha()}}"
+}
+
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion rootProject.ext.buildToolsVersion
+    compileSdkVersion compile_sdk_version
+    buildToolsVersion build_tools_version
+
     defaultConfig {
-        applicationId "net.techbrewery.jackie"
-        minSdkVersion 23
-        targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
+        applicationId "com.qriosity.attendee"
+        minSdkVersion min_sdk_version
+        targetSdkVersion target_sdk_version
+        versionCode gitCount().toInteger()
+        versionName getAutoVersionName()
+        multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
         release {
             minifyEnabled false
