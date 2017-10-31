@@ -1,7 +1,6 @@
 package net.techbrewery.jackie
 
 import android.os.AsyncTask
-import android.widget.TextView
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
 import java.io.IOException
@@ -12,7 +11,7 @@ import java.net.UnknownHostException
  * Created by Jacek Kwiecień on 30.10.2017.
  */
 
-class Client internal constructor(private var destinationAddress: String, private var dstPort: Int, private var textResponse: TextView) : AsyncTask<Void, Void, String>() {
+class Client internal constructor(private var destinationAddress: String, private var dstPort: Int) : AsyncTask<Void, Void, String>() {
     private var response = ""
 
     override fun doInBackground(vararg arg0: Void): String {
@@ -54,11 +53,6 @@ class Client internal constructor(private var destinationAddress: String, privat
             }
         }
         return response
-    }
-
-    override fun onPostExecute(result: String) {
-        textResponse.text = response
-        super.onPostExecute(result)
     }
 
 }
