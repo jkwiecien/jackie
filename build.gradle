@@ -8,6 +8,7 @@ buildscript {
         kotlin_version = '1.1.51'
         build_tools_version = '26.0.2'
         timber_version = '4.5.1'
+        support_library_version = '26.1.0'
     }
 
     repositories {

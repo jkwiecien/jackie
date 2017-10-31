@@ -7,6 +7,26 @@
     android:orientation="vertical"
     tools:context="net.techbrewery.jackie.SocketClientActivity">
 
+    <TextView
+        android:id="@+id/ipAddressLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        tools:text="Controller IP address: 192.168.27.10" />
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/ipEndInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Last part of ROBOT IP address" />
+
+    </android.support.design.widget.TextInputLayout>
+
+
     <Button
         android:id="@+id/sendButton"
         android:layout_width="wrap_content"

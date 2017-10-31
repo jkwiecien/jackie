@@ -29,7 +29,7 @@ class SocketServerActivity : Activity() {
         super.onCreate(savedInstanceState)
 
         val serverIpAddress = ipAddress
-        Timber.i("Server starting on: $serverIpAddress:${Configuration.PORT}")
+        Timber.i("Robot starting on: $serverIpAddress:${Configuration.PORT}")
 
         val socketServerThread = Thread(SocketServerThread())
         socketServerThread.start()
