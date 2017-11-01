@@ -10,7 +10,7 @@
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
 
-    <application android:name=".ThingsApp">
+    <application android:name=".RobotApp">
         <uses-library android:name="com.google.android.things" />
 
         <activity android:name=".MainActivity" />

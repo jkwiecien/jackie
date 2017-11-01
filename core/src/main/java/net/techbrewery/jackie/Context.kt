@@ -14,6 +14,23 @@ import java.nio.ByteOrder
  * Created by Jacek Kwiecień on 30.10.2017.
  */
 
+val Context.subnet: String?
+    get() {
+        val ip = ipAddress
+        return if (ip != null) {
+            var subnet = ""
+            val controllerSplitIp = ip.split(".").toMutableList()
+            controllerSplitIp.removeAt(controllerSplitIp.size - 1)
+            controllerSplitIp.forEachIndexed { index, ipPart ->
+                subnet += ipPart
+                if (index < controllerSplitIp.size - 1) subnet += "."
+            }
+            subnet
+        } else {
+            null
+        }
+    }
+
 val Context.ipAddress: String?
     get() {
         val wifiManager = this.getSystemService(WIFI_SERVICE) as WifiManager

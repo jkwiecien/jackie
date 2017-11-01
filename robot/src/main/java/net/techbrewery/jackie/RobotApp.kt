@@ -6,7 +6,7 @@ import timber.log.Timber
 /**
  * Created by Jacek Kwiecień on 30.10.2017.
  */
-class ThingsApp : Application() {
+class RobotApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
