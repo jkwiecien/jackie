@@ -5,6 +5,16 @@
     android:layout_height="match_parent"
     tools:context=".controller.remote.RemoteFragment">
 
-
+    <io.github.controlwear.virtual.joystick.android.JoystickView xmlns:custom="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/joystickAtRemoteFragment"
+        android:layout_width="@dimen/joystick_size"
+        android:layout_height="@dimen/joystick_size"
+        android:layout_gravity="right|bottom"
+        custom:JV_backgroundColor="#009688"
+        custom:JV_borderColor="#00796B"
+        custom:JV_borderWidth="4dp"
+        custom:JV_buttonColor="#FF6E40"
+        custom:JV_buttonSizeRatio="25%"
+        custom:JV_fixedCenter="false" />
 
 </FrameLayout>

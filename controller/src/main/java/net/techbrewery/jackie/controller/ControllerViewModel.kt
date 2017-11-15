@@ -23,7 +23,7 @@ class ControllerViewModel(application: Application) : AndroidViewModel(applicati
 
     fun connect(robotLastIpPart: String) {
         val robotIp = "${getApplication<Application>().subnet}.$robotLastIpPart"
-        client = Client("10.0.0.6", Configuration.PORT)
+        client = Client("192.168.21.202", Configuration.PORT)
         client?.start()
     }
 
@@ -33,6 +33,10 @@ class ControllerViewModel(application: Application) : AndroidViewModel(applicati
 
     fun toggleLed() {
         client?.sendMessage("Hello!")
+    }
+
+    fun sendMovementParams(angle: Int, strength: Int) {
+        client?.sendMessage("$strength:$angle")
     }
 }
 

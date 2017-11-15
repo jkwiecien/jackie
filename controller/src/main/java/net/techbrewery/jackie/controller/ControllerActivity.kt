@@ -12,7 +12,7 @@ import timber.log.Timber
 
 class ControllerActivity : AppCompatActivity() {
 
-    lateinit var viewModel: ControllerViewModel
+    private lateinit var viewModel: ControllerViewModel
 
     private val currentFragment: Fragment? get() = fragmentManager.findFragmentById(R.id.containerAtControllerActivity)
 
@@ -49,6 +49,10 @@ class ControllerActivity : AppCompatActivity() {
 
     fun toggleLed() {
         viewModel.toggleLed()
+    }
+
+    fun sendMovementParams(angle: Int, strength: Int) {
+        viewModel.sendMovementParams(angle, strength)
     }
 
     fun showRemote() {

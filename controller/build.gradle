@@ -46,4 +46,5 @@ dependencies {
     implementation project(path: ':core')
     implementation "com.android.support:appcompat-v7:$support_library_version"
     implementation "com.android.support:design:$support_library_version"
+    implementation "io.github.controlwear:virtualjoystick:1.7.1"
 }
