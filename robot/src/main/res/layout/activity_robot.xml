@@ -3,18 +3,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="net.techbrewery.jackie.controller.ControllerActivity">
+    android:background="@android:color/black"
+    tools:context=".robot.RobotActivity">
 
-    <android.view.SurfaceView
-        android:id="@+id/surfaceView"
+    <net.techbrewery.jackie.camera.CameraView
+        android:id="@+id/cameraViewAtRobotActivity"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_gravity="center" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="JACKIE"
+        android:text="PREVIEW"
         android:textColor="@android:color/white" />
 
 </FrameLayout>

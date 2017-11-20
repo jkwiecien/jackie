@@ -43,6 +43,5 @@ android {
 dependencies {
     compileOnly 'com.google.android.things:androidthings:+'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(":libstreaming")
     implementation project(path: ':core')
 }

@@ -1,1 +1,1 @@
-include ':controller', ':robot', ':libstreaming', ':core'
+include ':controller', ':robot', ':core'

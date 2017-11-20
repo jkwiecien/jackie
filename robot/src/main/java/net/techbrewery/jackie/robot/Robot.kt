@@ -1,4 +1,4 @@
-package net.techbrewery.jackie.socket
+package net.techbrewery.jackie.robot
 
 import com.google.android.things.pio.PeripheralManagerService
 import com.google.android.things.pio.Pwm
@@ -6,6 +6,7 @@ import net.techbrewery.jackie.Configuration
 import timber.log.Timber
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import java.io.OutputStream
 import java.net.ServerSocket
 import java.net.Socket
 
@@ -13,14 +14,15 @@ import java.net.Socket
 /**
  * Created by Jacek Kwiecień on 01.11.2017.
  */
-class Server {
+class Robot {
 
     private val PWM_FREQUENCY = 100.0
 
     private val serverSocket = ServerSocket(Configuration.PORT)
 
     private var connectionThread: Thread? = null
-    private var receiverThread: Thread? = null
+    private var commandsReceiverThread: Thread? = null
+    private var videoSenderThread: Thread? = null
 
     private val service = PeripheralManagerService()
 
@@ -31,6 +33,10 @@ class Server {
     private var rightEnginePwm: Pwm? = null
     private var rightEnginePwmEnabled = false
     private var rightEngineDutyCycle = 0.0
+
+    private var videoActive = true
+
+    private var socketOutputStream: OutputStream? = null
 
     fun start() {
         leftEnginePwm = service.openPwm("PWM2")
@@ -44,17 +50,19 @@ class Server {
         rightEnginePwm?.setEnabled(rightEnginePwmEnabled)
 
         connectionThread = Thread(Runnable {
-            Timber.i("Server is waiting . . .")
+            Timber.i("Robot is waiting . . .")
             val socket = serverSocket.accept()
             Timber.i("Client with IP: ${socket.inetAddress.hostAddress} connected")
             connectionThread = null
-            startReceiverThread(socket)
+            socket.keepAlive = true
+            startCommandsReceiverThread(socket)
+            startVideoSenderThread(socket)
         })
         connectionThread?.start()
     }
 
-    private fun startReceiverThread(socket: Socket) {
-        receiverThread = Thread(Runnable {
+    private fun startCommandsReceiverThread(socket: Socket) {
+        commandsReceiverThread = Thread(Runnable {
             do {
                 val reader = BufferedReader(InputStreamReader(socket.getInputStream()))
                 val message = reader.readLine()
@@ -113,16 +121,27 @@ class Server {
                 }
             } while (message != "STOP")
         })
-        receiverThread?.start()
+        commandsReceiverThread?.start()
     }
 
-    //                senderThread -> {
-//                    val message = "Hello. I'm Robot.\nEND".byteInputStream(StandardCharsets.UTF_8)
-//                    do {
-//                        val br1 = BufferedReader(InputStreamReader(message))
-//                        val pr1 = PrintWriter(socket.getOutputStream(), true)
-//                        val input = br1.readLine()
-//                        pr1.println(input)
-//                    } while (input != "END")
-//                }
+
+    private fun startVideoSenderThread(socket: Socket) {
+//        val os = socket.getOutputStream()
+//        socketOutputStream = os
+//        videoSenderThread = Thread(Runnable {
+//            while (videoActive && os != null) {
+//                val dos = DataOutputStream(os)
+//                dos.writeInt(4)
+//                dos.writeUTF("#@@#")
+//                dos.writeInt(mActivityInstance.mPreview.mFrameBuffer.size())
+//                dos.writeUTF("-@@-")
+//                dos.flush()
+//                Timber.d(mActivityInstance.mPreview.mFrameBuffer.size())
+//                dos.write(mActivityInstance.mPreview.mFrameBuffer.toByteArray())
+//                //System.out.println("outlength"+mPreview.mFrameBuffer.length);
+//                dos.flush()
+//                Thread.sleep((1000 / 15).toLong())
+//            }
+//        })
+    }
 }

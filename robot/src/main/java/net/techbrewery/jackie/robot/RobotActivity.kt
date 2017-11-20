@@ -1,8 +1,13 @@
-package net.techbrewery.jackie.socket
+package net.techbrewery.jackie.robot
 
 import android.app.Activity
+import android.content.Context
+import android.hardware.camera2.CameraCharacteristics
+import android.hardware.camera2.CameraManager
 import android.os.Bundle
+import kotlinx.android.synthetic.main.activity_robot.*
 import net.techbrewery.jackie.Configuration
+import net.techbrewery.jackie.R
 import net.techbrewery.jackie.ipAddress
 import timber.log.Timber
 
@@ -10,15 +15,27 @@ import timber.log.Timber
 /**
  * Created by Jacek Kwiecień on 30.10.2017.
  */
-class SocketServerActivity : Activity() {
+class RobotActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_robot)
 
         val serverIpAddress = ipAddress
         Timber.i("Robot starting on: $serverIpAddress:${Configuration.PORT}")
-        Server().start()
+        Robot().start()
+
+        val manager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
+        manager.cameraIdList
+                .map { manager.getCameraCharacteristics(it) }
+                .forEach { Timber.d("INFO_SUPPORTED_HARDWARE_LEVEL " + it.get(CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL)!!) }
     }
+
+    override fun onPause() {
+        super.onPause()
+        cameraViewAtRobotActivity.pauseCamera()
+    }
+
 
 //    private inner class SocketServerThread : Thread() {
 //
@@ -27,7 +44,7 @@ class SocketServerActivity : Activity() {
 //
 //        override fun run() {
 //            val serverSocket = ServerSocket(Configuration.PORT)
-//            this@SocketServerActivity.serverSocket = serverSocket
+//            this@RobotActivity.serverSocket = serverSocket
 //            try {
 //                while (true) {
 //                    // block the call until connection is created and return
@@ -59,7 +76,7 @@ class SocketServerActivity : Activity() {
 //
 //        override fun run() {
 //            val outputStream: OutputStream
-//            val msgReply = "Hello from Server, you are #" + count
+//            val msgReply = "Hello from Robot, you are #" + count
 //
 //            try {
 //                outputStream = hostThreadSocket.getOutputStream()

@@ -9,15 +9,14 @@ import kotlinx.android.synthetic.main.fragment_connection.*
 import net.techbrewery.jackie.R
 import net.techbrewery.jackie.controller.ControllerActivity
 
+
 /**
  * Created by Jacek Kwiecień on 02.11.2017.
  */
 
 class ConnectionFragment : Fragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_connection, container, false)
-    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View = inflater.inflate(R.layout.fragment_connection, container, false)
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
