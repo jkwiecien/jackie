@@ -1,12 +1,13 @@
 package net.techbrewery.jackie.robot
 
+import android.graphics.ImageFormat
+import android.graphics.Rect
+import android.graphics.YuvImage
 import com.google.android.things.pio.PeripheralManagerService
 import com.google.android.things.pio.Pwm
 import net.techbrewery.jackie.Configuration
 import timber.log.Timber
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.io.OutputStream
+import java.io.*
 import java.net.ServerSocket
 import java.net.Socket
 
@@ -37,6 +38,10 @@ class Robot {
     private var videoActive = true
 
     private var socketOutputStream: OutputStream? = null
+
+    var videoDataToSend: ByteArray? = null
+    private var frameWidth = 0
+    private var frameHeight = 0
 
     fun start() {
         leftEnginePwm = service.openPwm("PWM2")
@@ -124,24 +129,36 @@ class Robot {
         commandsReceiverThread?.start()
     }
 
-
     private fun startVideoSenderThread(socket: Socket) {
-//        val os = socket.getOutputStream()
-//        socketOutputStream = os
-//        videoSenderThread = Thread(Runnable {
-//            while (videoActive && os != null) {
-//                val dos = DataOutputStream(os)
-//                dos.writeInt(4)
-//                dos.writeUTF("#@@#")
-//                dos.writeInt(mActivityInstance.mPreview.mFrameBuffer.size())
-//                dos.writeUTF("-@@-")
-//                dos.flush()
-//                Timber.d(mActivityInstance.mPreview.mFrameBuffer.size())
-//                dos.write(mActivityInstance.mPreview.mFrameBuffer.toByteArray())
-//                //System.out.println("outlength"+mPreview.mFrameBuffer.length);
-//                dos.flush()
-//                Thread.sleep((1000 / 15).toLong())
-//            }
-//        })
+        val sos = socket.getOutputStream()
+        socketOutputStream = sos
+
+        videoSenderThread = Thread(Runnable {
+            while (videoActive && sos != null && videoDataToSend != null) {
+                val frameBuffer = ByteArrayOutputStream()
+                val yuvImage = YuvImage(videoDataToSend!!, ImageFormat.NV21, frameWidth, frameHeight, null)
+                yuvImage.compressToJpeg(Rect(0, 0, frameWidth, frameHeight), 100, frameBuffer)
+
+                val outputStream = DataOutputStream(socketOutputStream)
+                outputStream.writeInt(4)
+                outputStream.writeUTF("#@@#")
+                outputStream.writeInt(frameBuffer.size())
+                outputStream.writeUTF("-@@-")
+                outputStream.flush()
+                Timber.d("Sending frame of size: ${frameBuffer.size()}")
+                outputStream.write(frameBuffer.toByteArray())
+                outputStream.flush()
+                Thread.sleep((1000 / 15).toLong())
+            }
+        })
+    }
+
+    fun setFrameSize(frameWidth: Int, frameHeight: Int) {
+        this.frameWidth = frameWidth
+        this.frameHeight = frameHeight
+    }
+
+    fun sendFrame(data: ByteArray) {
+        videoDataToSend = data
     }
 }

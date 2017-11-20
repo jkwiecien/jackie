@@ -1,13 +1,11 @@
 package net.techbrewery.jackie.robot
 
 import android.app.Activity
-import android.content.Context
-import android.hardware.camera2.CameraCharacteristics
-import android.hardware.camera2.CameraManager
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_robot.*
 import net.techbrewery.jackie.Configuration
 import net.techbrewery.jackie.R
+import net.techbrewery.jackie.camera.CameraFrameListener
 import net.techbrewery.jackie.ipAddress
 import timber.log.Timber
 
@@ -15,25 +13,29 @@ import timber.log.Timber
 /**
  * Created by Jacek Kwiecień on 30.10.2017.
  */
-class RobotActivity : Activity() {
+class RobotActivity : Activity(), CameraFrameListener {
+
+    private var robot = Robot()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_robot)
 
+        cameraViewAtRobotActivity.frameListener = this
+
         val serverIpAddress = ipAddress
         Timber.i("Robot starting on: $serverIpAddress:${Configuration.PORT}")
-        Robot().start()
-
-        val manager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
-        manager.cameraIdList
-                .map { manager.getCameraCharacteristics(it) }
-                .forEach { Timber.d("INFO_SUPPORTED_HARDWARE_LEVEL " + it.get(CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL)!!) }
+        robot.setFrameSize(cameraViewAtRobotActivity.frameWidth, cameraViewAtRobotActivity.frameHeight)
+        robot.start()
     }
 
     override fun onPause() {
         super.onPause()
         cameraViewAtRobotActivity.pauseCamera()
+    }
+
+    override fun onFrame(data: ByteArray) {
+        robot.sendFrame(data)
     }
 
 

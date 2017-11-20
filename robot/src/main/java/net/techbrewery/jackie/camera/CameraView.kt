@@ -2,14 +2,11 @@ package net.techbrewery.jackie.camera
 
 import android.content.Context
 import android.graphics.ImageFormat
-import android.graphics.Rect
-import android.graphics.YuvImage
 import android.hardware.Camera
 import android.util.AttributeSet
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import timber.log.Timber
-import java.io.ByteArrayOutputStream
 
 
 /**
@@ -17,9 +14,13 @@ import java.io.ByteArrayOutputStream
  */
 class CameraView : SurfaceView, SurfaceHolder.Callback, Camera.PreviewCallback {
 
-    var camera: Camera? = null
+    private var camera: Camera? = null
+    var frameListener: CameraFrameListener? = null
+
+    var frameWidth = 0
         private set
-    private var byteArrayOutputStream: ByteArrayOutputStream? = null
+    var frameHeight = 0
+        private set
 
     constructor(context: Context) : super(context) {
         init()
@@ -41,14 +42,16 @@ class CameraView : SurfaceView, SurfaceHolder.Callback, Camera.PreviewCallback {
 
     override fun surfaceChanged(surfaceHolder: SurfaceHolder, p1: Int, p2: Int, p3: Int) {
         camera?.stopPreview()
-
         val parameters = camera?.parameters
         val previewSizes = parameters?.supportedPreviewSizes
         val size = previewSizes?.first()
         previewSizes?.forEach { Timber.d("Preview size: ${it.width}x${it.height}") }
 
         if (parameters != null && size != null) {
-            parameters.setPreviewSize(size.width, size.height)
+            frameWidth = size.width
+            frameHeight = size.height
+
+            parameters.setPreviewSize(frameWidth, frameHeight)
             parameters.previewFormat = ImageFormat.NV21
             val lp = layoutParams
             lp.width = parameters.previewSize?.width ?: 0
@@ -82,11 +85,10 @@ class CameraView : SurfaceView, SurfaceHolder.Callback, Camera.PreviewCallback {
     }
 
     override fun onPreviewFrame(data: ByteArray, camera: Camera) {
-        val yuvImage = YuvImage(data, ImageFormat.NV21, this.width, this.height, null)
-//        Timber.d("WidthandHeight" + yuvImage.height + "::" + yuvImage.width)
-        val outputStream = ByteArrayOutputStream()
-        yuvImage.compressToJpeg(Rect(0, 0, this.width, this.height), 100, outputStream)
-        byteArrayOutputStream = outputStream
+        frameListener?.onFrame(data)
+//        val yuvImage = YuvImage(data, ImageFormat.NV21, this.width, this.height, null)
+////        Timber.d("WidthandHeight" + yuvImage.height + "::" + yuvImage.width)
+//        yuvImage.compressToJpeg(Rect(0, 0, this.width, this.height), 100, byteArrayOutputStream)
     }
 
     fun cleanUp() {
