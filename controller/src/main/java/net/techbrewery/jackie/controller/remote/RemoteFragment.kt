@@ -31,7 +31,7 @@ class RemoteFragment : Fragment() {
 //            if (fixedAngle in 180..270) fixedAngle = 180
 //            else if (fixedAngle in 270..360) fixedAngle = 0
 //
-//            Timber.i("fixedAngle: $fixedAngle")
+////            Timber.i("fixedAngle: $fixedAngle")
 //            var leftWheelMultiplier = 1f
 //            var rightWheelMultiplier = 1f
 //            when (fixedAngle) {
@@ -39,15 +39,15 @@ class RemoteFragment : Fragment() {
 //                    //turning left
 //                    var leftTurnAngle = Math.abs(90 - fixedAngle)
 //                    if (leftTurnAngle > 90) leftTurnAngle = 90
-//                    Timber.i("leftTurnAngle: $leftTurnAngle")
+////                    Timber.i("leftTurnAngle: $leftTurnAngle")
 //                    leftWheelMultiplier = (90f - leftTurnAngle.toFloat()) / 90f
 //                }
 //                in 0..89 -> {
 //                    //turning right
 //                    var rightTurnAngle = Math.abs(0 - fixedAngle)
 //                    if (rightTurnAngle > 90) rightTurnAngle = 90
-//                    Timber.i("rightTurnAngle: $rightTurnAngle")
-//                    rightWheelMultiplier = (90f - rightTurnAngle.toFloat()) / 90f
+////                    Timber.i("rightTurnAngle: $rightTurnAngle")
+//                    rightWheelMultiplier = rightTurnAngle.toFloat() / 90f
 //                }
 //            }
 //

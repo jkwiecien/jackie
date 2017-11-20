@@ -23,7 +23,8 @@ class ControllerViewModel(application: Application) : AndroidViewModel(applicati
 
     fun connect(robotLastIpPart: String) {
         val robotIp = "${getApplication<Application>().subnet}.$robotLastIpPart"
-        client = Client("192.168.21.202", Configuration.PORT)
+//        client = Client("10.0.0.6", Configuration.PORT)
+        client = Client("192.168.21.17", Configuration.PORT)
         client?.start()
     }
 

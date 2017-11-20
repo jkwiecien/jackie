@@ -9,16 +9,9 @@
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
-
     <application android:name=".RobotApp">
         <uses-library android:name="com.google.android.things" />
-
-        <activity android:name=".MainActivity" />
-
-        <activity android:name=".EngineActivity" />
-
         <activity android:name=".socket.SocketServerActivity">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
