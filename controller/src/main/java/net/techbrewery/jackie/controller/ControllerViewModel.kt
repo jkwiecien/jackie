@@ -25,8 +25,8 @@ class ControllerViewModel(application: Application) : AndroidViewModel(applicati
 
     fun connect(robotLastIpPart: String) {
         val robotIp = "${getApplication<Application>().subnet}.$robotLastIpPart"
-//        controller = Controller("10.0.0.6", Configuration.PORT)
-        controller = Controller("192.168.21.17", Configuration.PORT, this)
+        controller = Controller(robotIp, Configuration.PORT, this)
+//        controller = Controller("192.168.21.237", Configuration.PORT, this)
         controller?.start()
     }
 

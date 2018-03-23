@@ -37,7 +37,8 @@
             android:digits="1234567890"
             android:gravity="center"
             android:hint="Last part of ROBOT IP address"
-            android:inputType="numberSigned" />
+            android:inputType="numberSigned"
+            android:text="237" />
 
     </android.support.design.widget.TextInputLayout>
 

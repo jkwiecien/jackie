@@ -28,7 +28,7 @@ class RobotActivity : Activity(), CameraFrameListener {
         robot.setFrameSize(cameraViewAtRobotActivity.frameWidth, cameraViewAtRobotActivity.frameHeight)
         robot.start()
 
-        val addressText = "Address: $serverIpAddress:${Configuration.PORT}"
+        val addressText = "Address: $serverIpAddress : ${Configuration.PORT}"
         ipLabelAtRobotActivity.text = addressText
     }
 
