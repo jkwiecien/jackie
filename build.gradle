@@ -5,7 +5,7 @@ buildscript {
         min_sdk_version = 23
         compile_sdk_version = 26
         target_sdk_version = 26
-        kotlin_version = '1.1.60'
+        kotlin_version = '1.2.30'
         build_tools_version = '26.0.2'
         timber_version = '4.5.1'
         support_library_version = '26.1.0'
@@ -19,7 +19,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0'
+        classpath 'com.android.tools.build:gradle:3.0.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
         // NOTE: Do not place your application dependencies here; they belong

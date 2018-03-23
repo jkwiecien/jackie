@@ -1,6 +1,7 @@
 package net.techbrewery.jackie.controller.remote
 
 import android.app.Fragment
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -55,5 +56,9 @@ class RemoteFragment : Fragment() {
 
             (activity as? ControllerActivity)?.sendMovementParams(angle, strength)
         }
+    }
+
+    fun updatePreview(bitmap: Bitmap) {
+        previewViewAtRemoteFragment.setImageBitmap(bitmap)
     }
 }

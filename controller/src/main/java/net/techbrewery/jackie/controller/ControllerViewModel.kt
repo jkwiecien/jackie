@@ -3,7 +3,9 @@ package net.techbrewery.jackie.controller
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.MutableLiveData
+import android.graphics.Bitmap
 import net.techbrewery.jackie.Configuration
+import net.techbrewery.jackie.controller.remote.VideoListener
 import net.techbrewery.jackie.ipAddress
 import net.techbrewery.jackie.subnet
 
@@ -11,11 +13,11 @@ import net.techbrewery.jackie.subnet
  * Created by Jacek Kwiecień on 30.10.2017.
  */
 
-class ControllerViewModel(application: Application) : AndroidViewModel(application) {
+class ControllerViewModel(application: Application) : AndroidViewModel(application), VideoListener {
 
     val eventLiveData: MutableLiveData<ControllerViewEvent> = MutableLiveData()
     private val controllerIp = application.ipAddress ?: ""
-    private var client: Client? = null
+    private var controller: Controller? = null
 
     init {
         eventLiveData.postValue(ControllerViewEvent.ControllerIpFound(controllerIp, "Controller IP: $controllerIp"))
@@ -23,9 +25,9 @@ class ControllerViewModel(application: Application) : AndroidViewModel(applicati
 
     fun connect(robotLastIpPart: String) {
         val robotIp = "${getApplication<Application>().subnet}.$robotLastIpPart"
-//        client = Client("10.0.0.6", Configuration.PORT)
-        client = Client("192.168.21.17", Configuration.PORT)
-        client?.start()
+//        controller = Controller("10.0.0.6", Configuration.PORT)
+        controller = Controller("192.168.21.17", Configuration.PORT, this)
+        controller?.start()
     }
 
     fun disconnect() {
@@ -33,11 +35,15 @@ class ControllerViewModel(application: Application) : AndroidViewModel(applicati
     }
 
     fun toggleLed() {
-        client?.sendMessage("Hello!")
+        controller?.sendMessage("Hello!")
     }
 
     fun sendMovementParams(angle: Int, strength: Int) {
-        client?.sendMessage("$strength:$angle")
+        controller?.sendMessage("$strength:$angle")
+    }
+
+    override fun onVideoFrameReceived(bitmap: Bitmap) {
+        eventLiveData.postValue(ControllerViewEvent.VideoFrameReceived(bitmap))
     }
 }
 

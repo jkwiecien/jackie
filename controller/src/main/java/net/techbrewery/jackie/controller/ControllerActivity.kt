@@ -26,6 +26,7 @@ class ControllerActivity : AppCompatActivity() {
                 is ControllerViewEvent.RobotResponded -> Timber.i("Robot responded")
                 is ControllerViewEvent.ControllerIpFound -> (currentFragment as? ConnectionFragment)?.updateControllerIpLabel(event.labelText)
                 is ControllerViewEvent.RobotIpFound -> (currentFragment as? ConnectionFragment)?.updateRobotIpLabel(event.labelText)
+                is ControllerViewEvent.VideoFrameReceived -> (currentFragment as? RemoteFragment)?.updatePreview(event.bitmap)
             }
         })
 

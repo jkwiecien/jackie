@@ -61,7 +61,7 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="Show remote" />
+        android:text="Show controller" />
 
     <TextView
         android:id="@+id/responseLabel"

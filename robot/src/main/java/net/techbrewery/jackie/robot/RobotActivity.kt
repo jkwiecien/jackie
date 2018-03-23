@@ -27,10 +27,13 @@ class RobotActivity : Activity(), CameraFrameListener {
         Timber.i("Robot starting on: $serverIpAddress:${Configuration.PORT}")
         robot.setFrameSize(cameraViewAtRobotActivity.frameWidth, cameraViewAtRobotActivity.frameHeight)
         robot.start()
+
+        val addressText = "Address: $serverIpAddress:${Configuration.PORT}"
+        ipLabelAtRobotActivity.text = addressText
     }
 
-    override fun onPause() {
-        super.onPause()
+    override fun onStop() {
+        super.onStop()
         cameraViewAtRobotActivity.pauseCamera()
     }
 

@@ -3,7 +3,7 @@ package net.techbrewery.jackie.robot
 import android.graphics.ImageFormat
 import android.graphics.Rect
 import android.graphics.YuvImage
-import com.google.android.things.pio.PeripheralManagerService
+import com.google.android.things.pio.PeripheralManager
 import com.google.android.things.pio.Pwm
 import net.techbrewery.jackie.Configuration
 import timber.log.Timber
@@ -25,7 +25,7 @@ class Robot {
     private var commandsReceiverThread: Thread? = null
     private var videoSenderThread: Thread? = null
 
-    private val service = PeripheralManagerService()
+    private val peripheralManager = PeripheralManager.getInstance()
 
     private var leftEnginePwm: Pwm? = null
     private var leftEnginePwmEnabled = false
@@ -44,12 +44,12 @@ class Robot {
     private var frameHeight = 0
 
     fun start() {
-        leftEnginePwm = service.openPwm("PWM2")
+        leftEnginePwm = peripheralManager.openPwm("PWM2")
         leftEnginePwm?.setPwmFrequencyHz(PWM_FREQUENCY)
         leftEnginePwm?.setPwmDutyCycle(leftEngineDutyCycle)
         leftEnginePwm?.setEnabled(leftEnginePwmEnabled)
 
-        rightEnginePwm = service.openPwm("PWM1")
+        rightEnginePwm = peripheralManager.openPwm("PWM1")
         rightEnginePwm?.setPwmFrequencyHz(PWM_FREQUENCY)
         rightEnginePwm?.setPwmDutyCycle(rightEngineDutyCycle)
         rightEnginePwm?.setEnabled(rightEnginePwmEnabled)
@@ -140,7 +140,7 @@ class Robot {
                 yuvImage.compressToJpeg(Rect(0, 0, frameWidth, frameHeight), 100, frameBuffer)
 
                 val outputStream = DataOutputStream(socketOutputStream)
-                outputStream.writeInt(4)
+                outputStream.writeInt(Configuration.VIDEO_TOKEN)
                 outputStream.writeUTF("#@@#")
                 outputStream.writeInt(frameBuffer.size())
                 outputStream.writeUTF("-@@-")

@@ -12,7 +12,9 @@
         android:layout_height="match_parent"
         android:layout_gravity="center" />
 
+
     <TextView
+        android:id="@+id/ipLabelAtRobotActivity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

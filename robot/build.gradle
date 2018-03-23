@@ -41,7 +41,7 @@ android {
 }
 
 dependencies {
-    compileOnly 'com.google.android.things:androidthings:+'
+    compileOnly 'com.google.android.things:androidthings:0.7-devpreview'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(path: ':core')
 }

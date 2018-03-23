@@ -7,5 +7,6 @@ package net.techbrewery.jackie
 class Configuration {
     companion object {
         val PORT = 8080
+        val VIDEO_TOKEN = 4
     }
 }

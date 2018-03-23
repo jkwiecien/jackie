@@ -40,8 +40,9 @@ class CameraView : SurfaceView, SurfaceHolder.Callback, Camera.PreviewCallback {
         holder?.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS)
     }
 
-    override fun surfaceChanged(surfaceHolder: SurfaceHolder, p1: Int, p2: Int, p3: Int) {
-        camera?.stopPreview()
+    override fun surfaceCreated(surfaceHolder: SurfaceHolder) {
+        Timber.i("Camera surfaceCreated")
+
         val parameters = camera?.parameters
         val previewSizes = parameters?.supportedPreviewSizes
         val size = previewSizes?.first()
@@ -59,7 +60,12 @@ class CameraView : SurfaceView, SurfaceHolder.Callback, Camera.PreviewCallback {
             layoutParams = lp
         }
 
-        Timber.i("Starting camera: $camera")
+        camera?.setPreviewDisplay(surfaceHolder)
+    }
+
+    override fun surfaceChanged(surfaceHolder: SurfaceHolder, p1: Int, p2: Int, p3: Int) {
+        Timber.i("Camera surfaceChanged")
+        camera?.stopPreview()
         startCamera()
 
         //Configration Camera Parameter(full-size)
@@ -77,14 +83,12 @@ class CameraView : SurfaceView, SurfaceHolder.Callback, Camera.PreviewCallback {
     }
 
     override fun surfaceDestroyed(surfaceHolder: SurfaceHolder) {
+        Timber.i("Camera surfaceDestroyed")
         cleanUp()
     }
 
-    override fun surfaceCreated(surfaceHolder: SurfaceHolder) {
-        camera?.setPreviewDisplay(surfaceHolder)
-    }
-
     override fun onPreviewFrame(data: ByteArray, camera: Camera) {
+//        Timber.i("Camera onPreviewFrame")
         frameListener?.onFrame(data)
 //        val yuvImage = YuvImage(data, ImageFormat.NV21, this.width, this.height, null)
 ////        Timber.d("WidthandHeight" + yuvImage.height + "::" + yuvImage.width)
@@ -92,6 +96,7 @@ class CameraView : SurfaceView, SurfaceHolder.Callback, Camera.PreviewCallback {
     }
 
     fun cleanUp() {
+        Timber.i("Camera cleanup")
         camera?.stopPreview()
         camera?.setPreviewCallback(null)
         camera?.release()
@@ -99,11 +104,13 @@ class CameraView : SurfaceView, SurfaceHolder.Callback, Camera.PreviewCallback {
     }
 
     fun pauseCamera() {
+        Timber.i("Pausing camera")
         camera?.stopPreview()
         camera?.setPreviewCallback(null)
     }
 
     fun startCamera() {
+        Timber.i("Starting camera")
         camera?.setPreviewCallback(this)
         camera?.startPreview()
     }
